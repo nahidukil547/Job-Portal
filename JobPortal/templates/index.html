@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHub - Find Your Dream Job</title>
+    {% block linkcss %}
+    {% endblock linkcss %}
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+    <link rel="stylesheet" href="{% static "css/dashboard-styles.css" %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-briefcase"></i>
+                    <a href="{% url "home" %}"><span>JobHub</span></a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="">Career</a></li>
+                    {% comment %} <li><a href="#jobs">Find Jobs</a></li>
+                    <li><a href="#companies">Companies</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li> {% endcomment %}
+                </ul>
+                <div class="nav-buttons">
+                    <button class="user-button">
+                        {{ user.first_name|default:'Account' }}
+                    </button>
+                    <div class="dropdown-content">
+                        {% if user.is_authenticated %}
+                            <a href="{% url "dashboard" %}">Dashboard</a>
+                            <a href="{% url "logout" %}">Logout</a>
+                        {% else %}
+                            <a href="{% url "login" %}">Login</a>
+                            <a href="{% url "register" %}">Register</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+  
+
+    <!-- Featured Jobs -->
+    {% comment %} <section class="featured-jobs" id="jobs">
+        <div class="container">
+            <div class="jobs-header">
+                <h2>Find Your Perfect Job</h2>
+                <div class="jobs-search">
+                    <div class="search-input-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" name="query" id="jobsSearch" placeholder="Search jobs, companies, or keywords...">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="jobs-layout">
+                <!-- Sidebar Filters -->
+                <aside class="filters-sidebar">
+                    <div class="filter-section">
+                        <h3>Job Type</h3>
+                        <div class="filter-group">
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="job_type" value="full-time" {% if 'full-time' in selected_job_type %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Full Time
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="job_type" value="part-time" {% if 'part-time' in selected_job_type %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Part Time
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="job_type" value="remote" {% if 'remote' in selected_job_type %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Remote
+                            </label>
+                            <label class="filter-checkbox">
+                               <input type="checkbox" name="job_type" value="hybrid" {% if 'hybrid' in selected_job_type %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Hybrid
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <h3>Experience Level</h3>
+                        <div class="filter-group">
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="exp_level" value="entry-level" {% if 'entry' in selected_exp_level %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Entry Level
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="exp_level" value="mid-level" {% if 'mid' in selected_exp_level %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Mid Level
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="exp_level" value="senior-level" {% if 'senior' in selected_exp_level %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Senior Level
+                            </label>
+                            <label class="filter-checkbox">
+                                <input type="checkbox" name="exp_level" value="intern" {% if 'intern' in selected_exp_level %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Senior Level
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <button class="clear-filters" onclick="clearAllFilters()">
+                        <i class="fas fa-times"></i>
+                        Clear All Filters
+                    </button>
+                </aside>
+
+                <!-- Jobs Content -->
+                <div class="jobs-content">
+                    <div class="jobs-results-header">
+                        <div class="results-count" id="resultsCount">
+                            Showing <span id="jobCount">0</span> jobs
+                        </div>
+                        <div class="sort-options">
+                            <select id="sortBy" onchange="sortJobs()">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="salary-high">Salary: High to Low</option>
+                                <option value="salary-low">Salary: Low to High</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="jobs-grid" id="jobsContainer">
+                        <!-- Jobs will be populated by JavaScript -->
+                        {% if jobs %}
+                            {% for job in jobs %}
+                                <div class="job-card" data-job-id="${job.id}">
+                                    <div class="job-header">
+                                        <div class="job-info">
+                                        <h3>{{job.title}}</h3>
+                                        <div class="company-name">{{job.company_name}}</div>
+                                        <div class="job-location">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <strong>Locations: </strong>{{job.location}}
+                                        </div>
+                                        </div>
+                                        <div class="company-logo">
+                                        {{ job.company_name|slice:":1" }}
+                                        </div>
+                                    </div>
+                                    <div class="job-details">
+                                        
+                                        <div class="job-description">{{job.about_job}}</div>
+                                    </div>
+                                    <div class="job-footer">
+                                        <div>
+                                        {% if job.salary_range == 'Negotiable' %}
+                                            <div class="job-description">Negotiable</div>
+                                            {% else %}
+                                            <div class="job-salary">${{job.salary_range}}</div>
+                                        {% endif %}
+                                        <div class="job-posted">Posted: {{ job.created_at|timesince }} ago</div>
+                                        </div>
+                                        <button class="apply-btn" onclick="applyToJob(${job.id})">
+                                        Apply Now
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        {% endif %}
+                    </div>
+                    
+                    
+                    <div class="pagination-section">
+                        <div class="pagination-info">
+                            Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
+                        </div>
+                        <div class="pagination">
+                            {% if page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                                    <button class="pagination-btn"><i class="fas fa-chevron-left"></i></button>
+                                </a>
+                            {% else %}
+                                <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num == page_obj.number %}
+                                    <button class="pagination-btn active">{{ num }}</button>
+                                {% else %}
+                                    <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">
+                                        <button class="pagination-btn">{{ num }}</button>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                                    <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                                </a>
+                            {% else %}
+                                <button class="pagination-btn" disabled><i class="fas fa-chevron-right"></i></button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+    </section> {% endcomment %}
+
+
+    {% block content %}
+    
+    {% endblock content %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-briefcase"></i>
+                        <span>JobHub</span>
+                    </div>
+                    <p>Your trusted partner in finding the perfect career opportunity. Connect with top employers and discover your next role.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>For Job Seekers</h3>
+                    <ul>
+                        <li><a href="#">Browse Jobs</a></li>
+                        <li><a href="#">Career Advice</a></li>
+                        <li><a href="#">Resume Builder</a></li>
+                        <li><a href="#">Salary Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>For Employers</h3>
+                    <ul>
+                        <li><a href="#">Post a Job</a></li>
+                        <li><a href="#">Browse Resumes</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Employer Resources</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 JobHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static "js/script.js" %}"></script>
+</body>
+</html>

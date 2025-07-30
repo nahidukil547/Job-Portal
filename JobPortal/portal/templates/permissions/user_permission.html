@@ -1,0 +1,192 @@
+{% extends "dashboard_index.html" %}
+{% block content %}
+<div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="/dashboard/">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a href="/applicants/">
+                            <i class="fas fa-home"></i>
+                            <span>Applicants</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a href="/schedules/">
+                            <i class="fas fa-home"></i>
+                            <span>Interview Schedule</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+
+            {% if messages %}
+                {% for message in messages %}
+                <section class="welcome-section">
+                    <div class="welcome-content">
+                        <h1>Welcome back, {{user.first_name}} 👋</h1>
+                        {{ message }}
+                    </div>
+                </section>
+                {% endfor %}
+            {% endif %}
+            
+
+
+            <div class="container">
+                
+
+                <div class="listing-box">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <h2>Job List</h2>
+                            <span class="product-count">Showing  <strong id="productCount">{{candidates.count}}</strong> Applicant Appy</span>
+                        </div>
+                        <div class="table-actions">
+                            <form method="get" action="{% url 'dashboard' %}">
+                                <div class="search-box">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" name="q" id="searchInput" placeholder="Search jobs..." value="{{ query }}">
+                                </div>
+                            </form>
+                            <a href="{% url "create_permission" %}">
+                                <button class="btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Add Product
+                            </button>
+                            
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                       
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">SL No:</th>
+                                    <th class="text-left">User Name</th>
+                                    <th class="text-left">User Email</th>
+                                    <th class="text-left">Menu</th>
+                                    <th class="text-left">Can View</th>
+                                    <th class="text-left">Can Add</th>
+                                    <th class="text-left">Can Update</th>
+                                    <th class="text-left">Can Delete</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="permissionTableBody">
+                                {% if permission %}
+                                    {% for item in permission %}
+                                    <tr class="table-row">
+                                        <td class="text-center">{{ forloop.counter }}</td>
+
+                                        <td class="text-left">
+                                            <div class="user-info">
+                                                <a href="#" class="product-link">{{ item.user.first_name|capfirst }} {{ item.user.last_name }}</a>
+                                            </div>
+                                        </td>
+
+                                        <td class="text-left">
+                                            <span class="product-link">{{ item.user.email }}</span>
+                                        </td>
+
+                                        <td class="text-left">
+                                            <span class="product-link">{{ item.menu}}</span>
+                                        </td>
+
+                                        <td class="text-left">
+                                            
+                                            {{ item.can_view|yesno:"✔,✘" }}
+                                        </td>
+
+                                        <td class="text-left">
+                                            
+                                            {{ item.can_add|yesno:"✔,✘" }}
+                                            
+                                        </td>
+
+                                        <td class="text-left">
+                                            {{ item.can_update|yesno:"✔,✘" }}
+                                        </td>
+
+                                        <td class="text-left">
+                                            {{ item.can_delete|yesno:"✔,✘" }}
+                                        </td>
+
+                                        <td class="text-center">
+                                            <div class="action-buttons">
+                                                <a href="{% url "update_user_permission" id=item.id %}">
+                                                    <button class="action-btn view" title="View User">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </a>
+                                                <a href="{% url "delete_user_permission" id=item.id %}">
+                                                    <button class="action-btn delete" title="Delete Permission">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="9" class="text-center">No permissions found.</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-section">
+                        <div class="pagination-info">
+                            Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
+                        </div>
+                        <div class="pagination">
+                            {% if page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                                    <button class="pagination-btn"><i class="fas fa-chevron-left"></i></button>
+                                </a>
+                            {% else %}
+                                <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num == page_obj.number %}
+                                    <button class="pagination-btn active">{{ num }}</button>
+                                {% else %}
+                                    <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">
+                                        <button class="pagination-btn">{{ num }}</button>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                                    <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                                </a>
+                            {% else %}
+                                <button class="pagination-btn" disabled><i class="fas fa-chevron-right"></i></button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+{% endblock content %}

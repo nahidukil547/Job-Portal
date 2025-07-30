@@ -1,0 +1,165 @@
+{% extends "dashboard_index.html" %}
+{% block content %}
+<div class="dashboard-layout">
+        <!-- Sidebar -->
+        
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="/dashboard/">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a href="/applicants/">
+                            <i class="fas fa-home"></i>
+                            <span>Applicants</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a href="/schedules/">
+                            <i class="fas fa-home"></i>
+                            <span>Interview Schedule</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+
+            {% if messages %}
+                {% for message in messages %}
+                <section class="welcome-section">
+                    <div class="welcome-content">
+                        <h1>Welcome back, {{user.first_name}} 👋</h1>
+                        {{ message }}
+                    </div>
+                </section>
+                {% endfor %}
+            {% endif %}
+            
+
+
+            <div class="container">
+                
+                <div class="listing-box">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <h2>Application List</h2>
+                            <span class="product-count">Showing  <strong id="productCount">{{candidates.count}}</strong> Applicant Appy</span>
+                        </div>
+                        <div class="table-actions">
+                            <form method="get" action="{% url 'dashboard' %}">
+                                <div class="search-box">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" name="q" id="searchInput" placeholder="Search jobs..." value="{{ query }}">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">SL No:</th>
+                                    
+                                    <th class="text-left">Candidate Name</th>
+                                    <th class="text-left">Job Title</th>
+                                    <th class="text-left">Email</th>
+                                    <th class="text-left">Phone</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody">
+                                {% if candidates %}
+                                    {% for candidate in candidates %}
+                                    <tr class="table-row">
+                                        <td class="text-center">{{ forloop.counter }}</td>
+                                        
+                                        <td class="text-left">
+                                            <div class="product-name">
+                                                <a href="" class="product-link">{{candidate.first_name|capfirst}} {{candidate.last_name|capfirst}}</a>
+                                            </div>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="product-link">{{candidate.job.title}}</span>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="product-link">{{candidate.email}}</span>
+                                        </td>
+                                        <td class="text-left">
+                                            <span class="product-link">{{candidate.phone}}</span>
+                                        </td>
+                                        
+                                        
+                                        <td class="text-center">
+                                            <div class="action-buttons">
+                                                <a href="{% url "candidate_details" id=candidate.id %}">
+                                                    <button class="action-btn view" title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                </a>
+                                                
+                                                <a href="{% url "candidate_delete" id=candidate.id %}">
+                                                    <button class="action-btn delete" title="Delete Product">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td class="pagination-info">The File is empty</td>
+                                </tr>
+                                {% endif %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-section">
+                        <div class="pagination-info">
+                            Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
+                        </div>
+                        <div class="pagination">
+                            {% if page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                                    <button class="pagination-btn"><i class="fas fa-chevron-left"></i></button>
+                                </a>
+                            {% else %}
+                                <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num == page_obj.number %}
+                                    <button class="pagination-btn active">{{ num }}</button>
+                                {% else %}
+                                    <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">
+                                        <button class="pagination-btn">{{ num }}</button>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                                    <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                                </a>
+                            {% else %}
+                                <button class="pagination-btn" disabled><i class="fas fa-chevron-right"></i></button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+{% endblock content %}

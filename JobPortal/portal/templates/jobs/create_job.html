@@ -1,0 +1,96 @@
+{% extends "dashboard_index.html" %}
+{% load static %}
+
+{% block linkcss %}
+<link rel="stylesheet" href="{% static 'css/create_job.css' %}">
+<link href="https://fonts.google apis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+{% endblock linkcss %}
+{% block content %}
+
+
+
+   <div class="container">
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+    
+    <div class="form-wrapper">
+        <div class="header">
+            <h1>Create New Job</h1>
+            
+        </div>
+
+        <form method="POST" action="{% url 'create_job' %}" id="jobForm" >
+            {% csrf_token %}
+            {{ form.media }}
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="id_job_title" class="form-label">
+                        Job Title
+                    </label>
+                    {{ form.title }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_company" class="form-label">Company Name</label>
+                    {{ form.company_name }}
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="id_description" class="form-label">Job Description</label>
+                    {{ form.about_job }}
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="id_requirements" class="form-label">Requirements</label>
+                    {{ form.job_requirement }}
+                </div>
+
+                
+                <div class="form-group">
+                    <label for="id_job_type" class="form-label">Job Type</label>
+                    {{ form.job_type }}
+                </div>
+
+
+                <div class="form-group">
+                    <label for="id_experience" class="form-label">Experience Level</label>
+                    {{ form.exp_level }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_location" class="form-label">Location</label>
+                    {{ form.location }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_salary" class="form-label">Salary Range</label>
+                    {{ form.salary_range }}
+                </div>
+                <div class="form-group">
+                    <label for="id_salary" class="form-label">Vacancy</label>
+                    {{ form.vacancy }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_deadline" class="form-label">Application Deadline</label>
+                    {{ form.deadline }}
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Create Job Post
+            </button>
+            <div style="margin-top:30px">
+                <a href="/dashboard/"  class="submit-btn" >
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

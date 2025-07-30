@@ -1,0 +1,101 @@
+{% extends "dashboard_index.html" %}
+{% load static %}
+{% block linkcss %}
+<link rel="stylesheet" href="{% static "css/candidate/candidate_details.css" %}">
+{% endblock linkcss %}
+
+{% block content %}
+
+  <div class="container">
+    <!-- Profile Card -->
+{% if messages %}
+  <div class="message-container">
+      {% for message in messages %}
+        <div class="message ">{{ message }}</div>
+      {% endfor %}
+  </div>
+{% endif %}
+    <div class="card">
+      <div class="profile-header">
+        <div class="avatar">{{ candidate.first_name|slice:":1"|upper }}{{ candidate.last_name|slice:":1"|upper }}</div>
+        <div class="profile-info">
+          <h2>{{ candidate.first_name|capfirst}} {{ candidate.last_name|capfirst}}</h2>
+          <p>{{ candidate.email}} {{ candidate.phone}}</p>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label>First Name</label>
+          <p>{{candidate.first_name}}</p>
+        </div>
+        <div class="info-item">
+          <label>Last Name</label>
+          <p>{{candidate.last_name}}</p>
+        </div>
+        <div class="info-item">
+          <label>Email</label>
+          <a href="mailto:{{candidate.email}}"><p>{{candidate.email}}</p></a>
+        </div>
+        <div class="info-item">
+          <label>Phone</label>
+          <a href="tel:{{candidate.phone}}">
+            <p>{{candidate.phone}}</p>
+          </a>
+        </div>
+        <div class="info-item">
+          <label>Address</label>
+          <p>{{candidate.address}}</p>
+        </div>
+        <div class="info-item">
+          <label>Experience</label>
+          <p>{{candidate.experience}}</p>
+        </div>
+      </div>
+
+      <div class="documents">
+        <h3>Cover Letter</h3>
+       <p>{{candidate.cover_letter}}</p>
+        
+      </div>
+      <div class="documents">
+        <h3>Resume</h3>
+        <a href="{{ candidate.resume.url }}" target="_blank">Download Resume</a>
+        <div></div>
+      </div>
+    </div>
+
+    <!-- Schedule Section -->
+    <div class="card schedule-section">
+      <h3>Schedule Interview</h3>
+      <form method="post">
+        {% csrf_token %}
+        <label for="interview-date">Interview Date</label>
+        <input type="date" id="interview-date" name="interview-date" required />
+
+        <label for="interview-time">Interview Time</label>
+        <input type="time" id="interview-time" name="interview-time" required />
+
+        <label for="interview-model">Model</label>
+        <select id="interview-model" name="interview-model">
+          <option value="on-site">On Site</option>
+          <option value="online">Online (Zoom/Meet)</option>
+        </select>
+
+       <div class="form-group">
+        <label for="interview-location">Interview Location</label>
+        <textarea
+            id="interview-location"
+            name="interview-location"
+            rows="4"
+            placeholder="Enter interview address or video call link..."
+            required
+        ></textarea>
+        </div>
+        <button type="submit">Schedule Now</button>
+      </form>
+    </div>
+  </div>
+
+
+{% endblock content %}

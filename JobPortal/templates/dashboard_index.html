@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - JobHub</title>
+    <link rel="stylesheet" href="{% static "css/dashboard-styles.css" %}">
+    {% block linkcss %}{% endblock linkcss %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <a href="{% url "dashboard" %}"><span>JobHub</span></a>
+                
+            </div>
+            <div class="user-profile" onclick="toggleDropdown()">
+               
+                <div class="profile-info">
+                    <span class="profile-name">{{user.first_name}}</span>
+                </div>
+                <i class="fas fa-chevron-down"></i>
+
+                <!-- 🔽 Dropdown -->
+                <div class="dropdown-menu" id="profileDropdown">
+                    <a href="{% url "logout" %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    
+    {% endblock content %}
+
+    <script src="{% static "js/dashboard.js" %}"></script>
+
+</body>
+</html>

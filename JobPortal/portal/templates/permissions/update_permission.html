@@ -1,0 +1,146 @@
+{% extends "dashboard_index.html" %}
+{% load static %}
+
+{% block linkcss %}
+{% comment %} <link rel="stylesheet" href="{% static 'css/create_job.css' %}"> {% endcomment %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+{% endblock linkcss %}
+
+{% block content %}
+<style>
+    .permission-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #f9fafb;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+
+.permission-header h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #1e293b;
+}
+
+.permission-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.permission-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.permission-field label {
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.permission-field select,
+.permission-field input[type="text"],
+.permission-field input[type="email"] {
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.permission-checkbox {
+    grid-column: 1 / 3;
+    background: #f1f5f9;
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.permission-checkbox label {
+    font-weight: 500;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.permission-btn {
+    margin-top: 20px;
+    padding: 10px 18px;
+    background-color: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.permission-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.permission-btn.cancel {
+    background-color: #64748b;
+}
+
+.permission-btn.cancel:hover {
+    background-color: #475569;
+}
+
+.permission-footer {
+    margin-top: 20px;
+}
+
+</style>
+<div class="permission-container">
+    <div class="permission-card">
+        <div class="permission-header">
+            <h1>Update Permission Access</h1>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="permission-grid">
+
+                <div class="permission-field">
+                    <label>User</label>
+                    {{ form.user }}
+                </div>
+
+                <div class="permission-field">
+                    <label>Menu</label>
+                    {{ form.menu }}
+                </div>
+
+                <div class="permission-checkbox">
+                    <label><input type="checkbox" name="can_view" {% if form.can_view.value %}checked{% endif %}> Can View</label>
+                </div>
+                <div class="permission-checkbox">
+                    <label><input type="checkbox" name="can_add" {% if form.can_add.value %}checked{% endif %}> Can Add</label>
+                </div>
+                <div class="permission-checkbox">
+                    <label><input type="checkbox" name="can_update" {% if form.can_update.value %}checked{% endif %}> Can Update</label>
+                </div>
+                <div class="permission-checkbox">
+                    <label><input type="checkbox" name="can_delete" {% if form.can_delete.value %}checked{% endif %}> Can Delete</label>
+                </div>
+
+            </div>
+
+            <button type="submit" class="permission-btn">Update Permission</button>
+
+            <div class="permission-footer">
+                <a href="{% url 'user_permission_list' %}" class="permission-btn cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
