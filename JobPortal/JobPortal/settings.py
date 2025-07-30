@@ -137,8 +137,8 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'nahidukil547@gmail.com'
-EMAIL_HOST_PASSWORD = 'ctcsneeitzvaqsjz'
+EMAIL_HOST_USER = 'please use your gmail'
+EMAIL_HOST_PASSWORD = 'use your gmail app pass'
 EMAIL_USE_TLS = True
 
 # Default primary key field type
