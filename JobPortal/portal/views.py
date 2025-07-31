@@ -369,3 +369,35 @@ def delete_interview_schedule(request,id):
     schedule.is_deleted= True
     schedule.save()
     return redirect('interview_schedule_list')
+
+# live test requirement
+# @login_required
+# def manage_applications(request, job_id):
+#     job = get_object_or_404(Job, id=job_id, employer=request.user)
+
+#     if request.method == 'POST':
+#         app_id = request.POST.get('application_id')
+#         new_status = request.POST.get('status')
+#         application = get_object_or_404(Application, id=app_id, job=job)
+#         if new_status in dict(Application.STATUS_CHOICES).keys():
+#             application.status = new_status
+#             application.save()
+
+#     applications = Application.objects.filter(job=job)
+#     return render(request, '', {
+#         'job': job,
+#         'applications': applications
+#     })
+
+# @login_required
+# def my_applications(request):
+#     status_filter = request.GET.get('status', '')
+#     apps = Application.objects.filter(applicant=request.user)
+#     if status_filter in dict(Application.STATUS_CHOICES).keys():
+#         apps = apps.filter(status=status_filter)
+
+#     return render(request, '', {
+#         'applications': apps,
+#         'status_filter': status_filter,
+#         'status_choices': Application.STATUS_CHOICES,
+#     })
