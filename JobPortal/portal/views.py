@@ -260,10 +260,6 @@ def candidate_details(request, id):
             messages.error(request, "Invalid date/time format. Please use correct format.",{e})
             return redirect('candidate_details', id=id)
 
-        # if InterviewSchedule.objects.filter(applicant=candidate, job=candidate.job).exists():
-        #     messages.warning(request, "An interview has already been scheduled for this candidate.")
-        #     return redirect('candidate_details', id=id)
-
         InterviewSchedule.objects.create(
             applicant=candidate,
             job=candidate.job,
@@ -273,6 +269,8 @@ def candidate_details(request, id):
             interview_location=location,
             created_by=request.user
         )
+        candidate.status="pending"
+        candidate.save()
         send_mail(candidate)
         messages.success(request, "Interview scheduled successfully.")
         return redirect('dashboard')
@@ -370,34 +368,24 @@ def delete_interview_schedule(request,id):
     schedule.save()
     return redirect('interview_schedule_list')
 
-# live test requirement
-# @login_required
-# def manage_applications(request, job_id):
-#     job = get_object_or_404(Job, id=job_id, employer=request.user)
+# live test
 
-#     if request.method == 'POST':
-#         app_id = request.POST.get('application_id')
-#         new_status = request.POST.get('status')
-#         application = get_object_or_404(Application, id=app_id, job=job)
-#         if new_status in dict(Application.STATUS_CHOICES).keys():
-#             application.status = new_status
-#             application.save()
+def approve(request,id):
+    candidate=get_object_or_404(Application,id=id)
+    print(candidate.status)
+    candidate.status ='approved'
+    candidate.save()
+    redirect("interview_schedule_list")
 
-#     applications = Application.objects.filter(job=job)
-#     return render(request, '', {
-#         'job': job,
-#         'applications': applications
-#     })
 
-# @login_required
-# def my_applications(request):
-#     status_filter = request.GET.get('status', '')
-#     apps = Application.objects.filter(applicant=request.user)
-#     if status_filter in dict(Application.STATUS_CHOICES).keys():
-#         apps = apps.filter(status=status_filter)
+def reject(request,id):
+    candidate=get_object_or_404(Application,id=id)
+    candidate.status='reject'
+    candidate.save()
+    redirect('interview_schedule_list')
 
-#     return render(request, '', {
-#         'applications': apps,
-#         'status_filter': status_filter,
-#         'status_choices': Application.STATUS_CHOICES,
-#     })
+
+
+
+
+  

@@ -78,7 +78,7 @@ class Job(models.Model):
     company_name = models.CharField(max_length=255)
     about_job = RichTextField(null=True, blank=True)
     job_requirement = RichTextField(null=True, blank=True)
-    salary_range= models.CharField(default="Negotiable", null=True, blank=True)
+    salary_range= models.CharField(default="Negotiable", null=True, blank=True, max_length=50)
     job_type=models.CharField(max_length=20, choices=JOB_TYPE)
     exp_level=models.CharField(max_length=30, choices=EXP_LEVEL)
     vacancy= models.PositiveIntegerField(default=1,null=True, blank=True)
@@ -104,6 +104,11 @@ class Job(models.Model):
         super().save(*args, **kwargs)
 
 class Application(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    )
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
@@ -112,6 +117,7 @@ class Application(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE,related_name='applications')
     experience = models.PositiveIntegerField(null=True, blank=True)
     resume = models.FileField(upload_to='resumes/')
+    status= models.CharField(max_length=50, choices=STATUS_CHOICES, default="pending")
     cover_letter = models.TextField()
     applied_at = models.DateTimeField(auto_now_add=True)
     is_active=models.BooleanField(default=True)

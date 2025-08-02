@@ -26,7 +26,9 @@ urlpatterns = [
     path('user/access/update/<int:id>', views.update_user_permission, name='update_user_permission'),
     path('user/access/delete/<int:id>', views.delete_user_permission, name='delete_user_permission'),
 
-    # path('employer/job/<int:job_id>/applications/', views.manage_applications, name='manage_applications'),
-    # path('my-applications/', views.my_applications, name='my_applications'),
+    # live test 
+
+    path('approve/job/<int:id>/', views.approve, name='approve'),
+    path('reject/job/<int:id>/', views.reject, name='reject'),
 
 ]
