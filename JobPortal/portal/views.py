@@ -353,7 +353,6 @@ def delete_user_permission(request,id):
     return redirect('user_permission_list')
 
 
-
 def interview_schedule_list(request):
     if not checkUserPermission(request, "can_view", "schedules/"):
         return redirect('home')
@@ -367,8 +366,6 @@ def delete_interview_schedule(request,id):
     schedule.is_deleted= True
     schedule.save()
     return redirect('interview_schedule_list')
-
-# live test
 
 def approve(request,id):
     candidate=get_object_or_404(Application,id=id)
