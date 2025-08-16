@@ -24,6 +24,20 @@
                             <span>Interview Schedule</span>
                         </a>
                     </li>
+                    <li class="nav-item ">
+                        <a href="/employees/">
+                            <i class="fas fa-home"></i>
+                            <span>Employees</span>
+                        </a>
+                    </li>
+                    {% if request.user.is_superuser %}
+                        <li class="nav-item ">
+                            <a href="/user/access/">
+                                <i class="fas fa-home"></i>
+                                <span>Employees</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </nav>
         </aside>
@@ -71,9 +85,14 @@
                                         <td class="text-center">{{ forloop.counter }}</td>
                                         
                                         <td class="text-left">
-                                            <div class="product-name">
+                                             <div class="product-name">
                                                 <a href="" class="product-link">{{candidate.applicant.first_name|capfirst}} {{candidate.applicant.last_name|capfirst}}</a>
-                                            </div>
+                                            </div> 
+                                            {% comment %} <span class="product-link">
+
+                                            {{ candidate.applicant.status }}
+                                        
+                                    </span>  {% endcomment %}
                                         </td>
                                         <td class="text-left">
                                             <span class="product-link">{{candidate.job.title}}</span>
@@ -99,10 +118,11 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="action-buttons">
-                                                {% comment %} <a href="{% url "candidate_details" id=candidate.id %}">
+                                                <a href="{% url "approve" id=candidate.applicant.id %}">
                                                     <button class="action-btn view" title="View Details">
-                                                    <i class="fas fa-eye"></i>
+                                                    <i class="fa-solid fa-thumbs-up"></i>
                                                 </button>
+<<<<<<< HEAD
                                                 </a> {% endcomment %}
                                                 <a href="{% url "approve" id=candidate.id %}">
                                                     <button class="action-btn view" title="View Details">
@@ -115,8 +135,17 @@
                                                         <i class="fa-solid fa-thumbs-down"></i>
                                                     </button>
                                                 </a>
+=======
+                                                </a> 
+>>>>>>> c65722b (Fix: Employee Aprove and Rejection. Add: Employees list, add remove)
                                                 
-                                                <a href="{% url "delete_interview_schedule" id=candidate.id %}">
+                                                <a href="{% url "reject" id=candidate.applicant.id %}">
+                                                    <button class="action-btn edit" title="Delete Product">
+                                                        <i class="fa-solid fa-thumbs-down"></i>
+                                                    </button>
+                                                </a>
+                                                
+                                                <a href="{% url "delete_interview_schedule" id=candidate.applicant.id %}">
                                                     <button class="action-btn delete" title="Delete Product">
                                                         <i class="fas fa-trash"></i>
                                                     </button>

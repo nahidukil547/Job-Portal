@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import UserPermission, Profile, Job, Application, InterviewSchedule
+from .models import UserPermission, Profile, Job, Application, InterviewSchedule, MenuList
 from .common_fun import checkUserPermission,send_mail, deactivate_expired_jobs_and_applications, deactivate_expired_interview_schedule
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
@@ -123,7 +123,8 @@ def register_view(request):
                 user=user,
                 phone=phone,
                 address=address,
-                is_active=False
+                is_active=True,
+                is_deleted= False
             )
 
             return redirect('login')
@@ -173,7 +174,6 @@ def create_job(request):
 
 
 def job_details(request, slug):
-    
     job = get_object_or_404(Job, slug=slug)
     candidates = Application.objects.filter(job=job).order_by('-applied_at')
 
@@ -224,6 +224,7 @@ def update_job(request, slug):
         'form': form,
         'job': job,
     })
+
 @login_required
 def delete_job(request, slug):
     if not checkUserPermission(request, "can_delete", "dashboard/"):
@@ -256,6 +257,7 @@ def candidate_details(request, id):
             datetime_str = f"{interview_date} {interview_time}"
             schedule_datetime = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M")
             schedule_datetime = timezone.make_aware(schedule_datetime)
+
         except ValueError as e:
             messages.error(request, "Invalid date/time format. Please use correct format.",{e})
             return redirect('candidate_details', id=id)
@@ -270,6 +272,11 @@ def candidate_details(request, id):
             created_by=request.user
         )
         candidate.status="pending"
+<<<<<<< HEAD
+=======
+        candidate.is_active=False
+        candidate.is_deleted= True
+>>>>>>> c65722b (Fix: Employee Aprove and Rejection. Add: Employees list, add remove)
         candidate.save()
         send_mail(candidate)
         messages.success(request, "Interview scheduled successfully.")
@@ -367,16 +374,60 @@ def delete_interview_schedule(request,id):
     schedule.save()
     return redirect('interview_schedule_list')
 
+<<<<<<< HEAD
 def approve(request,id):
     candidate=get_object_or_404(Application,id=id)
     print(candidate.status)
     candidate.status ='approved'
     candidate.save()
     redirect("interview_schedule_list")
+=======
+def employee_list(request):
+    employees= Profile.objects.filter(is_active=True)
+    return render(request,'employee/employees_list.html',{'employees':employees})
+
+def approve(request,id):
+
+    candidate=get_object_or_404(Application,id=id)
+    user = User.objects.create_user(
+                first_name=candidate.first_name,
+                last_name=candidate.last_name,
+                username=candidate.email,
+                email=candidate.email,
+                password=candidate.first_name+'123'
+            )
+    Profile.objects.create(
+        user=user,
+        phone=candidate.phone,
+        address=candidate.address,
+        role=candidate.job.title,
+        is_active=True,
+        is_deleted= False
+    )
+    candidate.status ='approved'
+    candidate.is_active=False
+    candidate.is_deleted= True
+    candidate.save()
+
+    permission_menu = MenuList.objects.get(menu_name="Dashboard Access")
+
+    UserPermission.objects.create(
+        user=user,
+        menu=permission_menu,
+        can_view=True,
+        created_by=request.user,
+    )
+    interviewer=InterviewSchedule.objects.get(applicant=candidate)
+    interviewer.is_deleted= True
+    interviewer.save()
+
+    return redirect("employee_list")
+>>>>>>> c65722b (Fix: Employee Aprove and Rejection. Add: Employees list, add remove)
 
 
 def reject(request,id):
     candidate=get_object_or_404(Application,id=id)
+<<<<<<< HEAD
     candidate.status='reject'
     candidate.save()
     redirect('interview_schedule_list')
@@ -386,3 +437,9 @@ def reject(request,id):
 
 
   
+=======
+    interviewer=InterviewSchedule.objects.get(applicant=candidate)
+    interviewer.is_deleted= True
+    interviewer.save()
+    return redirect('interview_schedule_list')
+>>>>>>> c65722b (Fix: Employee Aprove and Rejection. Add: Employees list, add remove)

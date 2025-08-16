@@ -2,7 +2,7 @@
 {% block content %}
 <div class="dashboard-layout">
         <!-- Sidebar -->
-            <aside class="sidebar">
+             <aside class="sidebar">
             <nav class="sidebar-nav">
                 <ul>
                     <li class="nav-item active">
@@ -23,6 +23,20 @@
                             <span>Interview Schedule</span>
                         </a>
                     </li>
+                    <li class="nav-item ">
+                        <a href="/employees/">
+                            <i class="fas fa-home"></i>
+                            <span>Employees</span>
+                        </a>
+                    </li>
+                    {% if request.user.is_superuser %}
+                        <li class="nav-item ">
+                            <a href="/user/access/">
+                                <i class="fas fa-home"></i>
+                                <span>Employees</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </nav>
         </aside>
@@ -57,7 +71,7 @@
                     <div class="table-header">
                         <div class="table-title">
                             <h2>Job List</h2>
-                            <span class="product-count">Showing <strong id="productCount">{{candidates.count}}</strong> Jobs</span>
+                            <span class="product-count">Showing <strong id="productCount">{{jobs.count}}</strong> Jobs</span>
                         </div>
                         <div class="table-actions">
                             <form method="get" action="{% url 'dashboard' %}">

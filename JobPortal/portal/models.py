@@ -52,7 +52,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=15)
     address = models.TextField(null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    role= models.CharField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)
+    created_at    = models.DateTimeField(auto_now_add=True,null=True)
 
     def __str__(self):
         return self.user.username
@@ -120,6 +123,7 @@ class Application(models.Model):
     status= models.CharField(max_length=50, choices=STATUS_CHOICES, default="pending")
     cover_letter = models.TextField()
     applied_at = models.DateTimeField(auto_now_add=True)
+    status= models.CharField(max_length=50, choices=STATUS_CHOICES, default="pending")
     is_active=models.BooleanField(default=True)
     is_deleted= models.BooleanField(default=False)
 

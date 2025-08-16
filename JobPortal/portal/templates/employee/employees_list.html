@@ -2,6 +2,7 @@
 {% block content %}
 <div class="dashboard-layout">
         <!-- Sidebar -->
+        
          <aside class="sidebar">
             <nav class="sidebar-nav">
                 <ul>
@@ -40,32 +41,17 @@
                 </ul>
             </nav>
         </aside>
-
         <!-- Main Content -->
         <main class="main-content">
             <!-- Welcome Section -->
 
-            {% if messages %}
-                {% for message in messages %}
-                <section class="welcome-section">
-                    <div class="welcome-content">
-                        <h1>Welcome back, {{user.first_name}} 👋</h1>
-                        {{ message }}
-                    </div>
-                </section>
-                {% endfor %}
-            {% endif %}
-            
-
-
             <div class="container">
                 
-
                 <div class="listing-box">
                     <div class="table-header">
                         <div class="table-title">
-                            <h2>Job List</h2>
-                            <span class="product-count">Showing  <strong id="productCount">{{candidates.count}}</strong> Applicant Appy</span>
+                            <h2>Interview Schedule List</h2>
+                            <span class="product-count">Showing  <strong id="productCount">{{employees.count}}</strong> Employees List</span>
                         </div>
                         <div class="table-actions">
                             <form method="get" action="{% url 'dashboard' %}">
@@ -74,95 +60,80 @@
                                     <input type="text" name="q" id="searchInput" placeholder="Search jobs..." value="{{ query }}">
                                 </div>
                             </form>
-                            <a href="{% url "create_permission" %}">
-                                <button class="btn-primary">
-                                <i class="fas fa-plus"></i>
-                                Add Product
-                            </button>
-                            
-                            </a>
                         </div>
                     </div>
 
                     <div class="table-container">
-                       
                         <table class="modern-table">
                             <thead>
                                 <tr>
                                     <th class="text-center">SL No:</th>
-                                    <th class="text-left">User Name</th>
-                                    <th class="text-left">User Email</th>
-                                    <th class="text-left">Menu</th>
-                                    <th class="text-left">Can View</th>
-                                    <th class="text-left">Can Add</th>
-                                    <th class="text-left">Can Update</th>
-                                    <th class="text-left">Can Delete</th>
+                                    
+                                    <th class="text-left">Employee Name</th>
+                                    <th class="text-left">Role</th>
+                                    <th class="text-left">Email</th>
+                                    <th class="text-left">Phone</th>
+                                    <th class="text-left">Join At</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="permissionTableBody">
-                                {% if permission %}
-                                    {% for item in permission %}
+                            <tbody id="productTableBody">
+                                {% if employees %}
+                                    {% for employee in employees %}
                                     <tr class="table-row">
                                         <td class="text-center">{{ forloop.counter }}</td>
-
+                                        
                                         <td class="text-left">
-                                            <div class="user-info">
-                                                <a href="#" class="product-link">{{ item.user.first_name|capfirst }} {{ item.user.last_name }}</a>
-                                            </div>
+                                             <div class="product-name">
+                                                <a href="" class="product-link">{{employee.user.first_name|capfirst}} {{employee.user.last_name|capfirst}}</a>
+                                            </div> 
                                         </td>
-
                                         <td class="text-left">
-                                            <span class="product-link">{{ item.user.email }}</span>
+                                            <span class="product-link">{{employee.role}}</span>
                                         </td>
-
                                         <td class="text-left">
-                                            <span class="product-link">{{ item.menu}}</span>
+                                            <span class="product-link">{{employee.user.email}}</span>
                                         </td>
-
                                         <td class="text-left">
-                                            
-                                            {{ item.can_view|yesno:"✔,✘" }}
+                                            <span class="product-link">{{employee.phone}}</span>
                                         </td>
-
                                         <td class="text-left">
-                                            
-                                            {{ item.can_add|yesno:"✔,✘" }}
-                                            
+                                            <span class="product-link">{{ employee.created_at|date:"F , Y" }}</span>
                                         </td>
-
-                                        <td class="text-left">
-                                            {{ item.can_update|yesno:"✔,✘" }}
-                                        </td>
-
-                                        <td class="text-left">
-                                            {{ item.can_delete|yesno:"✔,✘" }}
-                                        </td>
-
+                                        
+                                        
+                                        
                                         <td class="text-center">
                                             <div class="action-buttons">
-                                                <a href="{% url "update_user_permission" id=item.id %}">
-                                                    <button class="action-btn view" title="View User">
-                                                        <i class="fas fa-eye"></i>
+                                                {% comment %} <a href="{% url "approve" id=candidate.applicant.id %}"> {% endcomment %}
+                                                    <button class="action-btn view" title="View Details">
+                                                    <i class="fa-solid fa-thumbs-up"></i>
+                                                </button>
+                                                </a> 
+                                                
+                                                {% comment %} <a href="{% url "reject" id=candidate.applicant.id %}"> {% endcomment %}
+                                                    <button class="action-btn edit" title="Delete Product">
+                                                        <i class="fa-solid fa-thumbs-down"></i>
                                                     </button>
                                                 </a>
-                                                <a href="{% url "delete_user_permission" id=item.id %}">
-                                                    <button class="action-btn delete" title="Delete Permission">
+                                                
+                                                {% comment %} <a href="{% url "delete_interview_schedule" id=candidate.applicant.id %}"> {% endcomment %}
+                                                    <button class="action-btn delete" title="Delete Product">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </a>
                                             </div>
                                         </td>
                                     </tr>
-                                    {% endfor %}
+                                {% endfor %}
                                 {% else %}
                                 <tr>
-                                    <td colspan="9" class="text-center">No permissions found.</td>
+                                    <td class="pagination-info">The File is empty</td>
                                 </tr>
                                 {% endif %}
+                                
                             </tbody>
                         </table>
-
                     </div>
 
                     <!-- Pagination -->
