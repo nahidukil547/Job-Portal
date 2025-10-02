@@ -272,11 +272,10 @@ def candidate_details(request, id):
             created_by=request.user
         )
         candidate.status="pending"
-<<<<<<< HEAD
-=======
+
         candidate.is_active=False
         candidate.is_deleted= True
->>>>>>> c65722b (Fix: Employee Aprove and Rejection. Add: Employees list, add remove)
+
         candidate.save()
         send_mail(candidate)
         messages.success(request, "Interview scheduled successfully.")
@@ -374,14 +373,14 @@ def delete_interview_schedule(request,id):
     schedule.save()
     return redirect('interview_schedule_list')
 
-<<<<<<< HEAD
+
 def approve(request,id):
     candidate=get_object_or_404(Application,id=id)
     print(candidate.status)
     candidate.status ='approved'
     candidate.save()
     redirect("interview_schedule_list")
-=======
+
 def employee_list(request):
     employees= Profile.objects.filter(is_active=True)
     return render(request,'employee/employees_list.html',{'employees':employees})
@@ -422,12 +421,12 @@ def approve(request,id):
     interviewer.save()
 
     return redirect("employee_list")
->>>>>>> c65722b (Fix: Employee Aprove and Rejection. Add: Employees list, add remove)
+
 
 
 def reject(request,id):
     candidate=get_object_or_404(Application,id=id)
-<<<<<<< HEAD
+
     candidate.status='reject'
     candidate.save()
     redirect('interview_schedule_list')
@@ -436,10 +435,9 @@ def reject(request,id):
 
 
 
-  
-=======
+
     interviewer=InterviewSchedule.objects.get(applicant=candidate)
     interviewer.is_deleted= True
     interviewer.save()
     return redirect('interview_schedule_list')
->>>>>>> c65722b (Fix: Employee Aprove and Rejection. Add: Employees list, add remove)
+

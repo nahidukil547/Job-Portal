@@ -26,16 +26,12 @@ urlpatterns = [
     path('user/access/update/<int:id>', views.update_user_permission, name='update_user_permission'),
     path('user/access/delete/<int:id>', views.delete_user_permission, name='delete_user_permission'),
 
-<<<<<<< HEAD
-    # live test 
 
     path('approve/job/<int:id>/', views.approve, name='approve'),
     path('reject/job/<int:id>/', views.reject, name='reject'),
 
-=======
-    
     path('employees/', views.employee_list, name='employee_list'),
     path('approve/job/<int:id>/', views.approve, name='approve'),
     path('reject/job/<int:id>/', views.reject, name='reject'),
->>>>>>> c65722b (Fix: Employee Aprove and Rejection. Add: Employees list, add remove)
+
 ]
