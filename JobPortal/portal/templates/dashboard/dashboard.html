@@ -13,27 +13,27 @@
                     </li>
                     <li class="nav-item ">
                         <a href="/applicants/">
-                            <i class="fas fa-home"></i>
-                            <span>Applicants</span>
+                            <i class="fa-solid fa-address-book"></i>
+                            <span>Job Applicants</span>
                         </a>
                     </li>
                     <li class="nav-item ">
                         <a href="/schedules/">
-                            <i class="fas fa-home"></i>
+                            <i class="fa-solid fa-business-time"></i>
                             <span>Interview Schedule</span>
                         </a>
                     </li>
                     <li class="nav-item ">
                         <a href="/employees/">
-                            <i class="fas fa-home"></i>
+                            <i class="fa-solid fa-users"></i>
                             <span>Employees</span>
                         </a>
                     </li>
                     {% if request.user.is_superuser %}
                         <li class="nav-item ">
                             <a href="/user/access/">
-                                <i class="fas fa-home"></i>
-                                <span>Employees</span>
+                                <i class="fa-solid fa-person-dots-from-line"></i>
+                                <span>Permission List</span>
                             </a>
                         </li>
                     {% endif %}

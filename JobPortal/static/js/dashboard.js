@@ -1,5 +1,3 @@
-
-// // Sidebar navigation
 function setupSidebarNavigation() {
   const navItems = document.querySelectorAll(".nav-item")
 
@@ -23,7 +21,6 @@ function toggleDropdown() {
     dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
 }
 
-// Optional: Close dropdown on outside click
 document.addEventListener('click', function(event) {
     const dropdown = document.getElementById("profileDropdown");
     const profile = document.querySelector('.user-profile');

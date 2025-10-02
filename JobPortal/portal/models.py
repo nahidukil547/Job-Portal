@@ -135,7 +135,6 @@ class InterviewSchedule(models.Model):
     INT_PLACE=(
         ('on-site', 'On Site'),
         ('online', 'Online'),
-        
     )
     applicant= models.ForeignKey(Application, on_delete=models.CASCADE, related_name='interview_schedule')
     job= models.ForeignKey(Job, on_delete=models.CASCADE)
