@@ -8,7 +8,7 @@ packaging==26.1
 pillow==11.3.0
 psycopg==3.2.9
 psycopg-binary==3.2.9
-psycopg2-binary==2.9.11
+psycopg2-binary
 sqlparse==0.5.3
 typing_extensions==4.15.0
 tzdata==2025.2
